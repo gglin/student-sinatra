@@ -10,28 +10,29 @@ require_relative 'lib/models/student'
 module StudentSite
   class App < Sinatra::Base
 
-    def initialize
-      super
-      @artists = ["Frank Sinatra", "Bing Crosby", "Bob\n\n\n\n", 1, 2, "dslajkffoiejfijasdlfl"]
-    end
+    # def initialize
+    #   super
+    #   @artists = ["Frank Sinatra", "Bing Crosby", "Bob\n\n\n\n", 1, 2, "dslajkffoiejfijasdlfl"]
+    # end
 
-    def set_random_numbers(arg)
-      @random_numbers = arg
-    end
+    # def set_random_numbers(arg)
+    #   @random_numbers = arg
+    # end
 
     get '/' do
-      "hello world!"
+      @students = Student.all
+      erb :'students/students'
     end
 
-    get '/hello-world' do
-      set_random_numbers((1..20).to_a)
-      p @random_numbers
-      erb :hello
-    end
+    # get '/hello-world' do
+    #   set_random_numbers((1..20).to_a)
+    #   p @random_numbers
+    #   erb :hello
+    # end
 
-    get '/artists' do
-      erb :artists
-    end
+    # get '/artists' do
+    #   erb :artists
+    # end
 
     get '/students' do
       @students = Student.all
@@ -43,5 +44,13 @@ module StudentSite
       @student = Student.find_by_url(params[:url])
       erb :'students/student_profile'
     end
+
+    get '/id/:id' do
+      # @students = Student.all
+      @student = Student.find(params[:id])
+      erb :'students/student_profile'
+    end
+
   end
 end
+

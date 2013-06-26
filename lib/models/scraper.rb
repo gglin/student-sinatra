@@ -44,7 +44,7 @@ class Scraper
     urls  = urls.collect{ |url| url.sub("students/","") }
 
     student_img_selector = "li.home-blog-post div.blog-thumb img"
-    imgs = index.css(student_img_selector).collect{|student| student.attr("src").downcase}
+    imgs = index.css(student_img_selector).collect{|student| student.attr("src")}
     imgs = imgs.collect{ |img| (img[0..3]=="http" ? "" : "/") + img }
 
     student_tagline_selector = "li.home-blog-post p.home-blog-post-meta"
@@ -105,9 +105,21 @@ class Scraper
           info[:github]   = student_page.css(social_media_selector)[2].attr("href")
           info[:blog]     = student_page.css(social_media_selector)[3].attr("href")
 
-          quote_selector = "div.textwidget"
+          quote_selector = "div.section-testimonials-curriculum div.textwidget"
           info[:quote]    = student_page.css(quote_selector).text
 
+          # section_title_selector = "div.section-title span.actual-title"
+          # info[:section_titles]   = student_page.css(section_title_selector).collect{|x| x.text}
+
+          # services_selector = "div.ok-text-column"
+          # info[:services] = student_page.css(services_selector).collect{|x| x.inner_html}
+           
+          # section_selector = "div.this-div-is-just-a-helpful-container"
+          # section_htmls = student_page.css(section_selector).collect{|x| x.inner_html}
+          # section_htmls.each_with_index do |section, index|
+          #   info["section_html_#{index+1}".to_sym] = section
+          # end
+          
           student = {(index+1) => info}
           p student
 
@@ -162,7 +174,7 @@ scraper.create_database(db_name)
 
 scraper.scrape_index(index_html)
 scraper.scrape_students(index_html)
-# pp scraper.students
+pp scraper.students
 
 scraper.insert_into_db(db_name)
 
